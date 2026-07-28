@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Temperature Converter + Input Guard</title>
+<style>
+  body{font-family:Arial,sans-serif;background:#0f1220;color:#e7e9f5;padding:30px;}
+  .box{max-width:420px;margin:auto;background:#171b2e;padding:20px;border-radius:10px;}
+  input,select{width:100%;padding:8px;margin:6px 0 14px;border-radius:6px;border:1px solid #2a2f4a;background:#0e1120;color:#fff;}
+  button{width:100%;padding:10px;background:#5eead4;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+  .out{margin-top:14px;background:#0a0c18;padding:12px;border-radius:8px;white-space:pre-wrap;font-family:monospace;font-size:.85rem;}
+</style>
+</head>
+<body>
+    <h2> Temperature Converter</h2>
+    <label>Value</label>
+    <input id="tempValue" type="number" placeholder="e.g., 100">
+
+    <lable>Original unit</lable>
+    <label for="unitFrom">From</label>
+    <select id="unitFrom">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>    
+    </select>
+    <label for="unitTo">To</label>
+    <select id="unitTo">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+    </select>
+    <button id="convertBtn">Convert</button>
+    <div class="out" id="output"></div>
+<script>
+    
+    const tempValue = document.getElementById('tempValue');
+    const unitFrom = document.getElementById('unitFrom');
+    const unitTo = document.getElementById('unitTo');
+    const convertBtn = document.getElementById('convertBtn');
+    const output = document.getElementById('output');
+
+    convertBtn.addEventListener('click', () => {
+        const value = parseFloat(tempValue.value);
+        const fromUnit = unitFrom.value;
+        const toUnit = unitTo.value;
+
+        if (isNaN(value)) {
+            output.textContent = 'Please enter a valid number.';
+            return;
+        }
+
+        let result;
+        if (fromUnit === 'C' && toUnit === 'F') {
+            result = (value * 9/5) + 32;
+            output.textContent = `${value}°C is ${result.toFixed(2)}°F`;
+        } else if (fromUnit === 'F' && toUnit === 'C') {
+            result = (value - 32) * 5/9;
+            output.textContent = `${value}°F is ${result.toFixed(2)}°C`;
+        } else {
+            output.textContent = 'Please select different units for conversion.';
+        }
+    });
+</script>    
+</body>
+
