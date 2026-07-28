@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JS – Tip & Tax Calculator</title>
+  <style>
+     body{font-family:Arial,sans-serif;background:#0f1220;color:#e7e9f5;padding:30px;}
+    .box{max-width:420px;margin:auto;background:#171b2e;padding:20px;border-radius:10px;}
+     input,select{width:100%;padding:8px;margin:6px 0 14px;border-radius:6px;border:1px solid #2a2f4a;background:#0e1120;color:#fff;}
+     button{width:100%;padding:10px;background:#5eead4;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+    .out{margin-top:14px;background:#0a0c18;padding:12px;border-radius:8px;white-space:pre-wrap;font-family:monospace;font-size:.85rem;}
+  </style>
+</head>
+<body>
+  <h1>Tip & Tax Calculator</h1>
+
+  <div class="card">
+    <label>Bill Amount / قيمة الفاتورة</label>
+    <input id="bill" type="number" placeholder="e.g., 120.50" />
+
+    <label>Tax % / نسبة الضريبة</label>
+    <input id="tax" type="number" placeholder="e.g., 16" />
+
+    <label>Tip % / نسبة الإكرامية</label>
+    <input id="tip" type="number" placeholder="e.g., 10" />
+
+    <label>Discount Code (optional) / كود خصم (اختياري)</label>
+    <input id="code" type="text" placeholder="e.g., VIP" />
+
+    <button id="calc">Calculate / حساب</button>
+    <div id="out" class="out">Totals will appear here…</div>
+  </div>
+
+  <script>
+    // constants, let, var
+    const APP = "BillHelper";
+    let lastRunMode = "INIT";
+    var legacy = "legacy-var-flag";
+
+    document.getElementById("calc").addEventListener("click", () => {
+      const billRaw = document.getElementById("bill").value;
+      const taxRaw  = document.getElementById("tax").value;
+      const tipRaw  = document.getElementById("tip").value;
+      const code    = document.getElementById("code").value;
+
+      // Cast to numbers (data types)
+      const bill = Number(billRaw);
+      const taxP = Number(taxRaw);
+      const tipP = Number(tipRaw);
+
+      // Validate input (logical + comparison)
+      const valid =
+        !isNaN(bill) && bill > 0 &&
+        !isNaN(taxP) && taxP >= 0 &&
+        !isNaN(tipP) && tipP >= 0;
+
+      if (!valid) {
+        document.getElementById("out").textContent = "Invalid inputs / مدخلات غير صالحة";
+        return;
+      }
+
+      // Arithmetic operators
+      const taxAmt = bill * (taxP / 100);
+      const tipAmt = bill * (tipP / 100);
+      let total = bill + taxAmt + tipAmt;
+
+      // Assignment chain (& **=)
+      let reward = 1;
+      reward += 1; // +=
+      reward *= 2; // *=
+      reward **= 1; // **=
+
+      // String operators and template literal
+      const baseLine = "Base=" + bill + ", Tax=" + taxAmt.toFixed(2) + ", Tip=" + tipAmt.toFixed(2);
+
+      // Comparison + logical for discount rules
+      let discount = 0;
+      // VIP code gives 10% if total > 200 OR (bill > 150 AND tip% >= 10)
+      const isVIP = (code.trim().toUpperCase() === "VIP");
+      if (isVIP && (total > 200 || (bill > 150 && tipP >= 10))) {
+        discount = total * 0.10;
+      }
+      // STUDENT code gives fixed 10 if total >= 50
+      const isStudent = (code.trim().toUpperCase() === "STUDENT");
+      if (isStudent && total >= 50) {
+        discount += 10; // combine with VIP if both match (edge case)
+      }
+
+    
+      total -= discount;
+
+  
+      console.log("== Types ==");
+      console.log(typeof bill, typeof taxP, typeof tipP, typeof code);
+
+      document.getElementById("out").textContent =
+        `${baseLine}\nDiscount=${discount.toFixed(2)}\nTotal=${total.toFixed(2)}\nReward=${reward}\n` +
+        `Code=${code || "—"} | VIP: ${isVIP} | STUDENT: ${isStudent}`;
+
+    
+      lastRunMode = "CALC";
+      console.log({APP, lastRunMode, legacy});
+    
+    });
+  </script>
+</body>
+</html>
