@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>User Card + Smart Calculator</title>
+<style>
+  :root{
+    --bg:#0f1220;
+    --panel:#171b2e;
+    --accent:#5eead4;
+    --accent2:#f472b6;
+    --text:#e7e9f5;
+    --muted:#9aa0c0;
+    --line:#2a2f4a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Tahoma','Segoe UI',sans-serif;
+    background:radial-gradient(circle at 20% 0%, #1c2140 0%, var(--bg) 60%);
+    color:var(--text);
+    padding:40px 16px;
+  }
+  h1{
+    text-align:center;
+    font-size:1.6rem;
+    margin-bottom:6px;
+  }
+  p.sub{
+    text-align:center;
+    color:var(--muted);
+    margin-top:0;
+    margin-bottom:30px;
+    font-size:.9rem;
+  }
+  .wrap{
+    max-width:560px;
+    margin:0 auto;
+    display:grid;
+    gap:20px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px;
+  }
+  .card h2{
+    margin-top:0;
+    font-size:1.05rem;
+    color:var(--accent);
+  }
+  label{
+    display:block;
+    font-size:.85rem;
+    color:var(--muted);
+    margin:12px 0 4px;
+  }
+  input{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#0e1120;
+    color:var(--text);
+    font-size:.95rem;
+  }
+  input:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  button{
+    margin-top:18px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:9px;
+    font-size:.95rem;
+    font-weight:bold;
+    cursor:pointer;
+    transition:transform .15s ease;
+  }
+  button:active{transform:scale(.98);}
+  #btnWelcome{background:var(--accent); color:#04211c;}
+  #btnCalc{background:var(--accent2); color:#2b0a1c;}
+ 
+  .out{
+    margin-top:16px;
+    background:#0a0c18;
+    border:1px dashed var(--line);
+    border-radius:10px;
+    padding:14px;
+    font-family:'Consolas','Courier New',monospace;
+    font-size:.85rem;
+    line-height:1.9;
+    white-space:pre-wrap;
+    min-height:20px;
+  }
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:.78rem;
+    margin-top:-6px;
+  }
+</style>
+
+</head>
+<body>
+
+  <h1> User Card + Smart Calculator</h1>
+  <p class="sub">Open the Console (F12) to see all the output details</p>
+
+  <div class="wrap">
+
+    
+    <div class="card">
+      <h2>1) User Card</h2>
+
+      <label for="userName">Name</label>
+      <input id="userName" type="text" placeholder="e.g., Zainab">
+
+      <label for="userAge">Age</label>
+      <input id="userAge" type="number" placeholder="e.g., 22">
+
+      <button id="btnWelcome">Create Welcome Card</button>
+      <div class="out" id="welcomeOut">The result will appear here...</div>
+    </div>
+
+    
+    <div class="card">
+      <h2>2) Mathematical Operations, Comparisons, Logic, and Strings</h2>
+
+      <label for="num1">First Number</label>
+      <input id="num1" type="number" placeholder="e.g., 10">
+
+      <label for="num2">Second Number</label>
+      <input id="num2" type="number" placeholder="e.g., 4">
+
+      <button id="btnCalc">Execute Operations</button>
+      <p class="hint">The complete result will also be printed in the Console</p>
+      <div class="out" id="calcOut">Results will appear here...</div>
+    </div>
+
+  </div>
+
+<script>
+
+const btnWelcome = document.getElementById('btnWelcome');
+const btnCalc    = document.getElementById('btnCalc');
+
+btnWelcome.addEventListener('click', function () {
+
+  var rawName = document.getElementById('userName').value;
+
+  let age = Number(document.getElementById('userAge').value);
+
+  const greetingSymbol = "🎉";
+
+  let name = rawName || "Unknown User"; 
+
+  const isValidAge = (!isNaN(age)) && (age > 0);
+
+  const messageTemplate = `Hello ${name}! ${greetingSymbol}`;
+  const messageConcat   = "Hello " + name + "! " + greetingSymbol;
+
+  console.log("----- User Card -----");
+  console.log("Name:", name, "| Type:", typeof name);
+  console.log("Age:", age, "| Type:", typeof age);
+  console.log("Valid Age? (Boolean):", isValidAge, "| Type:", typeof isValidAge);
+  console.log("Message (Template Literal):", messageTemplate);
+  console.log("Message (Concatenation +):", messageConcat);
+  console.log("Constant Symbol (const):", greetingSymbol, "| Type:", typeof greetingSymbol);
+
+  const ageLine = isValidAge
+    ? `Age: ${age} years old`
+    : `Invalid Age Entered`;
+
+  const output =
+`${messageTemplate}
+${ageLine}
+
+typeof name  -> ${typeof name}
+typeof age   -> ${typeof age}
+typeof isValidAge -> ${typeof isValidAge}`;
+
+  document.getElementById('welcomeOut').textContent = output;
+});
+
+
+
+btnCalc.addEventListener('click', function () 
+
+{
+  let a = Number(document.getElementById('num1').value);
+  let b = Number(document.getElementById('num2').value);
+
+   
+  const sum      = a + b;   // sum
+  const diff     = a - b;   // difference
+  const product  = a * b;   // product
+  const quotient = a / b;   // quotient
+  const remainder= a % b;   // remainder
+  const power    = a ** 2;  // power (square of the first number)
+
+  
+  let assignDemo = a;  
+  assignDemo += b;      
+  assignDemo -= 1;      
+  assignDemo *= 2;      
+
+  
+  const isEqual        = (a == b);   
+  const isStrictEqual  = (a === b);
+  const isGreater      = (a > b);
+  const isLessOrEqual  = (a <= b);
+
+  
+  const bothPositive = (a > 0) && (b > 0); 
+  const anyNegative  = (a < 0) || (b < 0);   
+  const notEqual     = !(a === b);          
+
+  
+  const resultLine1 = "first: " + a + " | second: " + b; 
+  const resultLine2 = `their sum is ${sum} and their product is ${product}`;  // template literal
+
+  console.log("----- Results -----");
+  console.log("Addition:", sum, "Subtraction:", diff, "Multiplication:", product);
+  console.log("Division:", quotient, "Remainder:", remainder, "Power:", power);
+  console.log("After Chained Assignment (+=, -=, *=):", assignDemo);
+  console.log("a == b :", isEqual, "| a === b :", isStrictEqual);
+  console.log("a > b :", isGreater, "| a <= b :", isLessOrEqual);
+  console.log("(AND):", bothPositive);
+  console.log("(OR):", anyNegative);
+  console.log("(NOT):", notEqual);
+  console.log(resultLine1);
+  console.log(resultLine2);
+
+  const output =
+`calculations:
+  a + b = ${sum} | a - b = ${diff} | a * b = ${product}
+  a / b = ${quotient} | a % b = ${remainder} | a ** 2 = ${power}
+
+ Chained Assignment (a += b, -=1, *=2):
+  Final Result = ${assignDemo}
+
+ comparisons:
+  a == b   -> ${isEqual}
+  a === b  -> ${isStrictEqual}
+  a > b    -> ${isGreater}
+  a <= b   -> ${isLessOrEqual}
+
+logic 
+  (a>0) && (b>0) -> ${bothPositive}
+  (a<0) || (b<0) -> ${anyNegative}
+  !(a === b)     -> ${notEqual}
+
+ Texts:
+  ${resultLine1}
+  ${resultLine2}`;
+
+  document.getElementById('calcOut').textContent = output;
+});
+</script>
+</body>
+</html>
