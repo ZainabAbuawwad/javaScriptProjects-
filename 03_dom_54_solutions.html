@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DOM Challenges - 54 Solutions</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 700px; margin: 30px auto; padding: 0 15px; }
+  section { border-bottom: 1px solid #ddd; padding: 12px 0; }
+  h3 { color: #333; }
+  .item { padding: 4px; }
+  button { margin: 2px; padding: 4px 8px; }
+</style>
+</head>
+<body>
+
+<h1>DOM Challenges — Sample Markup</h1>
+
+<h1 id="mainTitle">Main Title</h1>
+
+<p>First paragraph</p>
+<p>Second paragraph</p>
+<p>Third paragraph</p>
+
+<div class="item" data-id="5">Item A</div>
+<div class="item">Item B</div>
+<div class="item">Item C</div>
+
+<input type="text" id="username" value="john_doe">
+
+<button id="btn1">Button 1</button>
+<button id="btn2">Button 2</button>
+
+<ul id="myList">
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+
+<h2 id="heading2">Old Heading</h2>
+<div id="htmlTarget">original content</div>
+<div id="colorBox" style="width:100px;height:100px;background:#eee;">Box</div>
+
+<img id="myImage" src="https://via.placeholder.com/100" width="100">
+
+<form id="myForm">
+  <input type="text" id="formInput">
+  <button type="submit">Submit</button>
+</form>
+
+<p id="dblClickPara">Double click me</p>
+
+<textarea id="myTextarea" rows="3" cols="30"></textarea>
+<span id="charCount">0</span>
+
+<div id="notifyArea"></div>
+<div id="cardContainer"></div>
+<div id="dynamicList"></div>
+<table id="dynamicTable"></table>
+
+<script>
+/* ============================================================
+   A) Selectors (1-8)
+============================================================ */
+
+// 1. select <h1> three ways
+console.log(document.getElementById("mainTitle").textContent);
+console.log(document.querySelector("#mainTitle").textContent);
+console.log(document.getElementsByTagName("h1")[0].textContent);
+
+// 2. all <p>, change 2nd paragraph
+const paras = document.querySelectorAll("p");
+paras[1].textContent = "Second paragraph (changed)";
+
+// 3. all .item -> color blue
+document.querySelectorAll(".item").forEach(el => el.style.color = "blue");
+
+// 4. #username current value
+console.log(document.getElementById("username").value);
+
+// 5. all buttons -> red border
+document.querySelectorAll("button").forEach(btn => btn.style.border = "2px solid red");
+
+// 6. first <li> inside <ul>
+const firstLi = document.querySelector("ul li");
+console.log(firstLi.textContent);
+
+// 7. attribute selector data-id="5"
+const el5 = document.querySelector('[data-id="5"]');
+console.log(el5);
+
+// 8. tagName
+console.log(el5.tagName); // "DIV"
+
+/* ============================================================
+   B) Changing Text, HTML & Styles (9-16)
+============================================================ */
+
+// 9. change <h2> text
+document.getElementById("heading2").textContent = "Welcome to DOM!";
+
+// 10. replace innerHTML
+document.getElementById("htmlTarget").innerHTML = "<strong>Hello</strong>";
+
+// 11. background color on load
+window.addEventListener("load", () => {
+  document.getElementById("btn1").style.backgroundColor = "lightblue";
+});
+
+// 12. font size of all <p>
+document.querySelectorAll("p").forEach(p => p.style.fontSize = "20px");
+
+// 13. add class "active"
+document.getElementById("colorBox").classList.add("active");
+
+// 14. toggle class
+function toggleActive(el) {
+  el.classList.toggle("active");
+}
+
+// 15. hide element
+function hideElement(el) {
+  el.style.display = "none";
+}
+
+// 16. set attribute dynamically
+document.getElementById("myImage").src = "photo.jpg";
+
+/* ============================================================
+   C) Event Listeners (17-26)
+============================================================ */
+
+// 17. click -> alert
+document.getElementById("btn1").addEventListener("click", () => {
+  alert("Button clicked!");
+});
+
+// 18. click -> change div color
+document.getElementById("colorBox").addEventListener("click", function () {
+  this.style.backgroundColor = "orange";
+});
+
+// 19. mouseover/mouseout enlarge image
+const img = document.getElementById("myImage");
+img.addEventListener("mouseover", () => { img.style.transform = "scale(1.3)"; });
+img.addEventListener("mouseout", () => { img.style.transform = "scale(1)"; });
+
+// 20. keyup -> print typed text
+document.getElementById("formInput").addEventListener("keyup", (e) => {
+  console.log(e.target.value);
+});
+
+// 21. submit -> preventDefault
+document.getElementById("myForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("Form submission prevented");
+});
+
+// 22. click <li> -> change only that li's background
+document.getElementById("myList").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    e.target.style.backgroundColor = "yellow";
+  }
+});
+
+// 23. disable button after first click
+document.getElementById("btn2").addEventListener("click", function handler() {
+  this.disabled = true;
+});
+
+// 24. dblclick -> bold text
+document.getElementById("dblClickPara").addEventListener("dblclick", function () {
+  this.style.fontWeight = "bold";
+});
+
+// 25. log clicked element via event.target
+document.body.addEventListener("click", (e) => {
+  console.log("Clicked:", e.target);
+});
+
+// 26. Enter key triggers a function
+document.getElementById("formInput").addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {
+    console.log("Enter pressed!");
+  }
+});
+
+/* ============================================================
+   D) DOM Traversing (27-32)
+============================================================ */
+
+// 27. parent of a button
+console.log(document.getElementById("btn1").parentElement);
+
+// 28. children of <ul>
+console.log(document.getElementById("myList").children);
+
+// 29. next sibling
+document.getElementById("myList").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    console.log(e.target.nextElementSibling);
+  }
+});
+
+// 30. previous sibling of a paragraph
+console.log(document.querySelectorAll("p")[1].previousElementSibling);
+
+// 31. print clicked item's parent + children
+document.getElementById("myList").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    console.log("Parent:", e.target.parentElement);
+    console.log("Siblings/children of parent:", e.target.parentElement.children);
+  }
+});
+
+// 32. navigate from a child back to document.body
+function walkUpToBody(el) {
+  let current = el;
+  while (current !== document.body && current.parentElement) {
+    current = current.parentElement;
+  }
+  console.log(current); // document.body
+  return current;
+}
+
+/* ============================================================
+   E) Creating Elements Dynamically (33-40)
+============================================================ */
+
+// 33. new <li> appended to <ul>
+const newLi = document.createElement("li");
+newLi.textContent = "New item";
+document.getElementById("myList").appendChild(newLi);
+
+// 34. new <button> with click event
+const newBtn = document.createElement("button");
+newBtn.textContent = "Click me";
+newBtn.addEventListener("click", () => console.log("New button clicked"));
+document.body.appendChild(newBtn);
+
+// 35. <div> with title + paragraph
+const card = document.createElement("div");
+const cardTitle = document.createElement("h4");
+cardTitle.textContent = "Card Title";
+const cardText = document.createElement("p");
+cardText.textContent = "Card description text.";
+card.appendChild(cardTitle);
+card.appendChild(cardText);
+document.body.appendChild(card);
+
+// 36. text input inserted before another element
+const newInput = document.createElement("input");
+newInput.type = "text";
+document.getElementById("myForm").before(newInput);
+
+// 37. insert at beginning using .prepend()
+const prependedItem = document.createElement("li");
+prependedItem.textContent = "Prepended item";
+document.getElementById("myList").prepend(prependedItem);
+
+// 38. notification that disappears after 3s
+function showNotification(message) {
+  const note = document.createElement("div");
+  note.textContent = message;
+  note.style.cssText = "background:#333;color:#fff;padding:8px;margin-top:8px;";
+  document.getElementById("notifyArea").appendChild(note);
+  setTimeout(() => note.remove(), 3000);
+}
+
+// 39. card component (image + title + text + button)
+function createCard({ image, title, text }) {
+  const c = document.createElement("div");
+  c.style.cssText = "border:1px solid #ccc;padding:10px;margin:8px 0;";
+  c.innerHTML = `
+    <img src="${image}" width="80">
+    <h4>${title}</h4>
+    <p>${text}</p>
+    <button>View</button>
+  `;
+  document.getElementById("cardContainer").appendChild(c);
+}
+createCard({ image: "https://via.placeholder.com/80", title: "Product", text: "A short description" });
+
+// 40. clone an element
+const clonedList = document.getElementById("myList").cloneNode(true);
+document.body.appendChild(clonedList);
+
+/* ============================================================
+   F) Advanced DOM Manipulation (41-50)
+============================================================ */
+
+// 41. dynamic to-do item with delete/edit buttons
+function addTodo(text) {
+  const li = document.createElement("li");
+  li.textContent = text + " ";
+  const editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.onclick = () => {
+    const updated = prompt("Edit task:", li.firstChild.textContent);
+    if (updated) li.firstChild.textContent = updated + " ";
+  };
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "Delete";
+  delBtn.onclick = () => li.remove();
+  li.appendChild(editBtn);
+  li.appendChild(delBtn);
+  document.getElementById("myList").appendChild(li);
+}
+
+// 42. live character counter under textarea
+document.getElementById("myTextarea").addEventListener("input", (e) => {
+  document.getElementById("charCount").textContent = e.target.value.length;
+});
+
+// 43. highlight selected li, remove highlight from others
+document.getElementById("myList").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    document.querySelectorAll("#myList li").forEach(li => li.classList.remove("selected"));
+    e.target.classList.add("selected");
+  }
+});
+
+// 44. expandable/collapsible dropdown
+function createDropdown(title, contentHTML) {
+  const wrapper = document.createElement("div");
+  const header = document.createElement("div");
+  header.textContent = title;
+  header.style.cursor = "pointer";
+  const body = document.createElement("div");
+  body.innerHTML = contentHTML;
+  body.style.display = "none";
+  header.addEventListener("click", () => {
+    body.style.display = body.style.display === "none" ? "block" : "none";
+  });
+  wrapper.appendChild(header);
+  wrapper.appendChild(body);
+  document.body.appendChild(wrapper);
+}
+
+// 45. dark/light mode switcher
+function createThemeSwitcher() {
+  const btn = document.createElement("button");
+  btn.textContent = "Toggle Theme";
+  btn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+  });
+  document.body.appendChild(btn);
+}
+
+// 46. dynamic table from data
+function buildTable(data) {
+  const table = document.getElementById("dynamicTable");
+  table.innerHTML = "";
+  if (data.length === 0) return;
+  const headerRow = document.createElement("tr");
+  Object.keys(data[0]).forEach(key => {
+    const th = document.createElement("th");
+    th.textContent = key;
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+  data.forEach(rowData => {
+    const row = document.createElement("tr");
+    Object.values(rowData).forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      row.appendChild(td);
+    });
+    table.appendChild(row);
+  });
+}
+buildTable([{ name: "Sara", age: 30 }, { name: "Ali", age: 25 }]);
+
+// 47. product list -> click shows details
+function buildProductList(products, detailsContainerId) {
+  const list = document.getElementById("dynamicList");
+  products.forEach(p => {
+    const item = document.createElement("div");
+    item.textContent = p.name;
+    item.style.cursor = "pointer";
+    item.addEventListener("click", () => {
+      document.getElementById(detailsContainerId).textContent =
+        `${p.name} - $${p.price}`;
+    });
+    list.appendChild(item);
+  });
+}
+
+// 48. image slider/carousel
+function createCarousel(images) {
+  let index = 0;
+  const img = document.createElement("img");
+  img.src = images[index];
+  const prev = document.createElement("button");
+  prev.textContent = "Prev";
+  const next = document.createElement("button");
+  next.textContent = "Next";
+  prev.onclick = () => { index = (index - 1 + images.length) % images.length; img.src = images[index]; };
+  next.onclick = () => { index = (index + 1) % images.length; img.src = images[index]; };
+  document.body.append(img, prev, next);
+}
+
+// 49. form validation - empty fields get red border
+document.getElementById("myForm").addEventListener("submit", (e) => {
+  let valid = true;
+  document.querySelectorAll("#myForm input").forEach(input => {
+    if (input.value.trim() === "") {
+      input.style.border = "2px solid red";
+      valid = false;
+    } else {
+      input.style.border = "";
+    }
+  });
+  if (!valid) e.preventDefault();
+});
+
+// 50. FAQ accordion
+function buildFAQ(items) {
+  items.forEach(({ question, answer }) => {
+    const q = document.createElement("div");
+    q.textContent = question;
+    q.style.cursor = "pointer";
+    const a = document.createElement("div");
+    a.textContent = answer;
+    a.style.display = "none";
+    q.addEventListener("click", () => {
+      a.style.display = a.style.display === "none" ? "block" : "none";
+    });
+    document.body.append(q, a);
+  });
+}
+
+/* ============================================================
+   BONUS (51-54)
+============================================================ */
+
+// 51. click counter
+function createClickCounter() {
+  let clicks = 0;
+  const btn = document.createElement("button");
+  btn.textContent = `Clicked 0 times`;
+  btn.addEventListener("click", () => {
+    clicks++;
+    btn.textContent = `Clicked ${clicks} times`;
+  });
+  document.body.appendChild(btn);
+}
+
+// 52. shopping list: add -> strikethrough -> delete
+function createShoppingList() {
+  const input = document.createElement("input");
+  const addBtn = document.createElement("button");
+  addBtn.textContent = "Add";
+  const list = document.createElement("ul");
+
+  addBtn.addEventListener("click", () => {
+    if (!input.value.trim()) return;
+    const li = document.createElement("li");
+    li.textContent = input.value;
+    li.addEventListener("click", () => {
+      li.style.textDecoration = li.style.textDecoration === "line-through" ? "none" : "line-through";
+    });
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "x";
+    delBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      li.remove();
+    });
+    li.appendChild(delBtn);
+    list.appendChild(li);
+    input.value = "";
+  });
+
+  document.body.append(input, addBtn, list);
+}
+
+// 53. animation using setInterval
+function animateBox(el) {
+  let pos = 0;
+  const timer = setInterval(() => {
+    if (pos >= 200) { clearInterval(timer); return; }
+    pos += 2;
+    el.style.marginLeft = pos + "px";
+  }, 20);
+}
+
+// 54. tab system
+function createTabs(tabs) {
+  // tabs = [{ label: "Tab1", content: "..." }, ...]
+  const tabHeader = document.createElement("div");
+  const tabBody = document.createElement("div");
+
+  tabs.forEach((tab, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = tab.label;
+    btn.addEventListener("click", () => {
+      tabBody.textContent = tab.content;
+    });
+    tabHeader.appendChild(btn);
+    if (i === 0) tabBody.textContent = tab.content; // show first tab by default
+  });
+
+  document.body.append(tabHeader, tabBody);
+}
+createTabs([
+  { label: "Home", content: "Welcome home!" },
+  { label: "About", content: "About us content." }
+]);
+
+</script>
+</body>
+</html>
